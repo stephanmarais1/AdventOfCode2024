@@ -3,12 +3,19 @@ printfn "Hello from F#"
 
 
 let testData =
-    """xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))"""
+    """7 6 4 2 1
+1 2 7 8 9
+9 7 6 2 1
+1 3 2 4 5
+8 6 4 4 1
+1 3 6 7 9"""
     |> fun x -> x.Split("\n")
 
-let readData : seq<string> -> string[] =
-    Seq.collect (fun line ->
-        line.Split([|"mul("|], System.StringSplitOptions.RemoveEmptyEntries)
+
+let readData : seq<string> -> int[][] =
+    Seq.map (fun line ->
+        line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries)
+        |> Array.map int
     )
     >> Seq.toArray
 
@@ -53,17 +60,7 @@ printfn $"Safe Count : {safeCount}"
 
 let safeCount2 =
     System.IO.File.ReadLines "..//Day2Data.txt"
-    |> Seq.collect (fun line ->
-        line.Split([|"mul("|], System.StringSplitOptions.RemoveEmptyEntries)
-        |> Array.filter(fun x ->
-            match x.Split([|","; ")"|], System.StringSplitOptions.RemoveEmptyEntries) with
-            | a when a.Length >= 2 ->
-                match a[0].Length > 1 a[0].Length <= 3 && System.Int32.TryParse a[0] with
-                | true, Some n ->
-                )
-    )
-    |> Seq.toArray
-    
+    |> readData
     |> Array.sumBy(fun levels ->
 
         match checkSafe levels with

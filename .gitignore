@@ -21,3 +21,5 @@ Cargo.lock
 #.idea/
 bin/
 obj/
+
+.fake
