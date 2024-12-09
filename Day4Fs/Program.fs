@@ -82,6 +82,22 @@ let xmasCount =
 printfn $"XMAS count: {xmasCount}"
 
 
+let checkMAS currentPosition =
+    
+    let tryCooridante (row, col) =
+         dataArray |> Array.tryItem row |> Option.bind (fun x -> x |> Array.tryItem col)
+
+    match currentPosition |> diagRightDown |> tryCooridante, currentPosition |> diagLeftUp |> tryCooridante with
+    | Some 1, Some 3 | Some 3, Some 1 ->
+        
+        match currentPosition |> diagLeftDown |> tryCooridante, currentPosition |> diagRightUp |> tryCooridante with
+        | Some 1, Some 3 | Some 3, Some 1 ->
+            1
+
+        | _ -> 0
+    
+    | _ -> 0
+
 //part 2
 let masCrossCount =
     dataArray
@@ -89,11 +105,9 @@ let masCrossCount =
         row
         |> Array.mapi (fun colIndex thisChar -> 
             match thisChar with
-            | 0 ->
-                allDirections
-                |> Array.sumBy (fun moveDirection -> 
-                    checkXMAS moveDirection (rowIndex, colIndex) 1
-                )
+            | 2 ->
+                checkMAS (rowIndex, colIndex)
+                
             | _ -> 0
             
         )
@@ -102,4 +116,4 @@ let masCrossCount =
     |> Array.sum
     
     
-printfn $"XMAS count: {xmasCount}"
+printfn $"X-MAS count: {masCrossCount}"
